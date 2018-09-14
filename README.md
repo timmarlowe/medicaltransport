@@ -56,7 +56,7 @@ Entering a workday, TransportCo can expect both some cancellations and some on-d
 | Created Day-Of (On Demand) and Completed | 21821 | 237.2 |
 | Created Day-Of/Cancelled Day-Of | 8010 | 87.1 |
 
-Over days of the week, the number of day-of cancellations is usually higher than the number of 'On-Demand' rides (with the exception of weekends). However, the number of completed 'On-Demand' rides stays fairly steady, while both day-of cancellations and expected completions varies on a weekly cycle:
+Over days of the week, the number of day-of cancellations is usually higher than the number of 'On-Demand' rides (with the exception of weekends). However, the number of completed 'On-Demand' rides stays fairly steady, while both day-of cancellations and expected completions vary on a weekly cycle:
 
 ![Daily Rides v. Expectations](images/day_rides_cancel_ondemand.png)
 
@@ -75,26 +75,31 @@ Put more simply, here are expectations vs. actual rides:
 ### Exploring Completion and Cancellation
 As late cancellation seems to be driving the gap between actual and expected rides, further investigation of the when, where and who of completion v. cancellation was required.
 
-#### Ride Completions v. Cancellations by Time
+
+#### Ride Completions v. Cancellations over Time
 While roughly 30% of daily rides were cancellations, almost 30,000 of these cancellations were done before the day of pickup, meaning they likley did not impact business operations. I've discarded those records and mapped the rest below (CancelledHour and CancelledDayOf are mutually exclusive):
 ![Completion and Late Cancellation by day](images/day_rides_late_cancel.png)
+
 
 Both cancellations and completions rise and fall with weekday and weekends, although cancellations represent a lower percentage of total rides on weekends:
 ![Completion and Cancellation by Day of Week](images/timing_pickup_day.png)
 
+
 Overall late cancellation rates were as follows by day:
 ![Cancellation Rates over time](images/Daily_pct_late_cancelled.png)
+
 
 Pickup requests varied by hour as one might expect, with high request rates in the morning and mid-afternoon, and lower request rates at night and in the early morning. Pickups were also more likely to be on the hour, half hour and quarter hour than not.
 ![Hour Ride Request Histogram](images/time_hists.png)
 
+
 Both cancellation rates fell in early morning and at night:
 ![Completion and Cancellation by Time of Day](images/timing_pickup_time.png)
+
 
 __Conclusions__: While early mornings, nights, and weekends require lower capacity overall, they also have lower cancellation rates, meaning that the expected numbers of passengers are more likely to be close to the real total.
 
 #### Mapping Ride Completions and Cancellations to Geographical Location
-
 In mapping where ride demand and cancellations occurred, I've used the folium package in python.
 
 Completed pickup requests in Portland seem to cluster around the downtown area, with multiple small clusters in outlying towns:
@@ -102,24 +107,29 @@ Completed pickup requests in Portland seem to cluster around the downtown area, 
 __Completed Rides__
 ![Completed Rides](images/completed_map.png)
 
+
 Cancelled rides appear to cluster in those same areas:
 
 __Cancelled Rides__
 ![Cancelled Rides](images/cancellations_map.png)
+
 
 There is little difference in cancellation rate across zip codes with higher numbers of pickups.
 
 __Late Cancellation by Zip__
 ![Cancellation Choropleth map](images/cancellation_choro.png)
 
+
 Below is a time-series heatmap of completion over time. Note that the clusters stay fairly constant in location over days of the week (with weekend days being lighter).
 ![Heat Map of Completed Rides by Day](images/Completed_gif.gif)
+
 
 __Conclusions__: While these maps are useful for understanding where rides are originating and will later be useful for clustering and understanding where drivers should be placed, they do not currently provide much insight on where cancellations might occur.
 
 ___Note:___ In order to protect anonymity of the provider and to ensure we are not revealing patient medical information, I have removed the background from the map visuals in this section. I have also not provided the html maps themselves, but pngs and and gif of those maps, so that the source latitudes and longitudes cannot be viewed. In the interest of transparency, however, code for the creation of these heatmaps can be found in __[heatmap.py](src/heatmap.py)__.
 
-#### Who is Cancelling late
+
+#### Who is Cancelling late?
 Requested vehicle type of the user appears to matter little:
 ![Status vehicle type](images/status_vehicle_type.png)
 
@@ -135,7 +145,9 @@ Some of these users have extremely high late cancellation rates, making them res
 __Conclusions__: Identify users and companies who have high cancellation rates and reach out to them. Work with them to improve their use rates through nudges, app training, etc.
 
 ## Part 2: Modeling Late Cancellation
-Given the conclusions above, an ideal product for TransportCo at this time is a classifier of user late cancellation likelihood using the features of the ride and the user to predict probability of day-of cancellation. As a final element of my project, I built such a classifier. I used data from 6/15 through 8/31 (as I was informed that the first two weeks of program startup were a bit operationally rocky, and thus different than the later weeks of implementation). The outcome I was aiming to predict was __late cancellation__, which I defined as _cancellation the day of the scheduled ride_.
+Given the conclusions above, an ideal product for TransportCo at this time is a classifier of user late cancellation likelihood using the features of the ride and the user to predict probability of day-of cancellation. Day-of cancellation is costly for ride providers (who misallocate vehicles and drivers), for medical providers who misallocate space and resources for medical care, and for the patients themselves, who miss appointments and often incur higher medical costs down the road as a result. Predicting late cancellation can help the provider to nudge riders towards completion of their rides, lowering costs across the board.
+
+As the second step of my project, I built such a classifier. I used data from 6/15 through 8/31 (as I was informed that the first two weeks of program startup were a bit operationally rocky, and thus different than the later weeks of implementation). The outcome I was aiming to predict was __late cancellation__, which I defined as _cancellation the day of the scheduled ride_.
 
 ### Feature Engineering
 There were 15 non-textual features of the model I engineered:
@@ -145,7 +157,7 @@ There were 15 non-textual features of the model I engineered:
 - __User features__: Counts of number of rides the user has taken to this point, late cancellation rate of user to this point
 - __Ride Request Features__: Vehicle type, estimated cost
 
-Along with these 15 features, I also developed a 'text_pred' feature that used Multinomial Naive Bayes Classification to predict cancellation or non-cancellation of a ride using solely the rideNotes column. These notes were left by patients or their schedulers prior to the ride and represented a patient's needs for the ride. Because they ride notes focused on instructions to the driver, it is likely that they are independent from other features, with the possible exception of vehicle type. Therefore, I believe it was acceptable to use this prediction as a feature.
+Along with these 15 features, I also developed a 'text_pred' feature that used Multinomial Naive Bayes Classification to probabilistically predict cancellation or non-cancellation of a ride using solely the rideNotes column. These notes were left by patients or their schedulers prior to the ride and represented a patient's needs for the ride. Because they ride notes focused on instructions to the driver, it is likely that they are independent from other features, with the possible exception of vehicle type. Therefore, I believe it was acceptable to use this prediction as a feature.
 
 The Multinomial Naive Bayes classification using rideNotes had the following predictive success on its own:
 
@@ -158,9 +170,7 @@ This low level of recall is likely because it was conducted on pre-smoted data a
 
 #### An Aside on NMF
 
-Because I was interested, I also ran NMF on the 'rideNotes' column, using 20 latent topics (I a range of from 1-25 latent topics and found little to no elbow in the plot).
-
-![NMF Reconstruction Error](images/nmf_reconstruction_error.png)
+Because I was interested, I also ran non-negative matrix factorization (NMF) on the 'rideNotes' column, using 20 latent topics (I tested a range of from 1-25 latent topics and found little to no elbow in the plot, and so I decided on 20, which would at least provide me a fairly robust summary of topic types).
 
 The following are the latent components, as named by me, with their top 5 associated words.
 
@@ -186,6 +196,8 @@ The following are the latent components, as named by me, with their top 5 associ
 | 18    | pickup/drop-off 4 | 'er' 'floor' 'lobby' 'ride' 'th'|
 | 19    | wait time 5 | 'mins' 'return' 'wait' 'pharmacy' 'id'|
 | 20    | pickup/drop-off 5 | 'wc' 'transfer' 'doordoor' 'standard' 'manual'|
+
+While I did not use these topics in the final version of the modeling, it would be interesting to further investigate which topics are most related to cancellation. Initial plots indicate that some of the wait-time topics are slightly more related to cancellation than the others, but there is little definitive evidence for this.
 
 ### Pre-Processing/SMOTE
 As only roughly 25% of clients cancel late, there was a class imbalance, which I addressed using SMOTE, bringing my train data set up to 61,000 each of label 0 (no cancellation) and label 1 (late cancellation). The following code shows the concatenation of the nmf matrix with the data set and the SMOTE oversampling technique only on train data:
