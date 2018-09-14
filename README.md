@@ -5,9 +5,9 @@ _Tim Marlowe - 9/6/18_
 
 ![Medical Transport](images/medical_transport.png)
 
-## Problem Statement and Approach
+## Problem Statement
 
-At the beginning of June, a non-emergency medical transport app that shall remain unnamed (let's call them TransportCo), began a contract with a medical services network in a major metropolitan area. Through this contract they are facilitating the completion of approximately 2,000 rides per day. The majority of these rides are scheduled well ahead of time and completed as planned.
+At the beginning of June, a non-emergency medical transport app (which shall remain unnamed - let's call them TransportCo) began a contract with a medical services network in a major metropolitan area. Through this contract they are facilitating the completion of approximately 2,000 rides per day. The majority of these rides are scheduled well ahead of time and completed as planned.
 
 However, roughly 25% of their rides are cancelled the day of the ride, and 10% of ride stock is requested the day of the ride, and these numbers vary depending on the day. This means that planning for capacity can be difficult for TransportCo and its transport operators. TransportCo has therefore requested a demand analysis to determine:
   - What does an expected day vs. an actual day look like?
