@@ -13,9 +13,17 @@ However, roughly 25% of their rides are cancelled the day of the ride, and 10% o
   - What does an expected day vs. an actual day look like?
   - What can we do to mitigate the impact of these cancellations and on-demand rides on our business operations?
 
-## Data Source and Feature Engineering
+## Approach
 
-In order to answer these questions, TransportCo provided data for the first 92 days of its operations in the metro area (from June 1st to August 31st, 2018). Once test rides initiated by the TransportCo team were removed, this was 329,360 rows of data. This data included the following types of ride records:
+Given these questions and the provided data, I have mapped out four project objectives, which I will review in turn in this readme:
+1. Conduct exploratory data analysis on the who, when and where of ride cancellation and completion.
+2. Create a model that predicts late cancellation (cancellation the day of one's ride), enabling TransportCo and its partners to better nudge customers towards ride completion.
+3. Create a model that predicts in advance the number of rides TransportCo will need to provide by hour, better enabling them to allocate vehicles and drivers.
+4. Implement the above models in a prototyped dashboard that can be used by TransportCo employees to plan for the coming day.
+
+## Data Source
+
+TransportCo provided data for the first 92 days of its operations in the metro area (from June 1st to August 31st, 2018). Once test rides initiated by the TransportCo team were removed, this was 329,360 rows of data. This data included the following types of ride records:
 
 | Ride Status | Count of Rows |
 |-------------|:-------------:|
@@ -36,14 +44,6 @@ In order to answer these questions, TransportCo provided data for the first 92 d
 - __Cancellation/Status Info__: Ride status, cancellation reason and message
 
 This data contains no engineered features and thus can be reproduced/updated quickly by the company.
-
-## Approach
-
-Given these questions and the provided data, I have mapped out four project objectives, which I will review in turn in this readme:
-1. Conduct exploratory data analysis on the who, when and where of ride cancellation and completion.
-2. Create a model that predicts late cancellation (cancellation the day of one's ride), enabling TransportCo and its partners to better nudge customers towards ride completion.
-3. Create a model that predicts in advance the number of rides TransportCo will need to provide by hour, better enabling them to allocate vehicles and drivers.
-4. Implement the above models in a prototyped dashboard that can be used by TransportCo employees to plan for the coming day.
 
 ## Part 1: Exploratory Data Analysis
 ### Expected v. Actual Rides
