@@ -102,7 +102,7 @@ __Conclusions__: While early mornings, nights, and weekends require lower capaci
 #### Mapping Ride Completions and Cancellations to Geographical Location
 In mapping where ride demand and cancellations occurred, I've used the folium package in python.
 
-Completed pickup requests in Portland seem to cluster around the downtown area, with multiple small clusters in outlying towns:
+Completed pickup requests in the metro area seem to cluster around the downtown, with multiple small clusters in outlying towns:
 
 __Completed Rides__
 ![Completed Rides](images/completed_map.png)
