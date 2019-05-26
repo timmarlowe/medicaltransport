@@ -200,7 +200,7 @@ The following are the latent components, as named by me, with their top 5 associ
 While I did not use these topics in the final version of the modeling, it would be interesting to further investigate which topics are most related to cancellation. Initial plots indicate that some of the wait-time topics are slightly more related to cancellation than the others, but there is little definitive evidence for this.
 
 ### Pre-Processing/SMOTE
-As only roughly 25% of clients cancel late, there was a class imbalance, which I addressed using SMOTE, bringing my train data set up to 61,000 each of label 0 (no cancellation) and label 1 (late cancellation). The following code shows the concatenation of the nmf matrix with the data set and the SMOTE oversampling technique only on train data:
+As only roughly 25% of clients cancel late, there was a class imbalance, which I addressed using SMOTE, bringing my train data set up to 61,000 each of label 0 (no cancellation) and label 1 (late cancellation).
 
 ### Fitting multiple models
 I tested a range of models, including the following, with the following train results:
@@ -264,7 +264,7 @@ I also included whether the ride was a weekday or weekend, and what time of day 
 ### Model Results
 I again tested multiple models, this time regressors. These included linear regression, Lasso regression (linear regression with a penalty for absolute value of the coefficients), Ridge regression (linear regression with a penalty for squared value of the coefficients), a Random Forest Regressor, and Gradient Boosting and Adaptive boosting Regressors.
 
-The best results were achieved using Lasso Regression with an alpha (penalty) of 1. This model had an __RMSE of 9.13 rides__ on holdout data, meaning roughly that on an average hour, I was off by about 12 rides. This is not a bad result when you note that during the day there are around 300 rides per hour.
+The best results were achieved using Lasso Regression with an alpha (penalty) of 1. This model had an __RMSE of 9.13 rides__ on holdout data, meaning roughly that on an average hour, I was off by about 9 rides. This is not a bad result when you note that during the day there are around 300 rides per hour.
 
 However, I also calculated a naive baseline for these predictions, in which I used only my 'Expected Rides' variable (which, remember, is historical cancellation rate times # of scheduled rides). This variable, it turns out, was almost as good as my own modeled predictions, with an __RMSE of just 9.74 rides__ on holdout data.
 
